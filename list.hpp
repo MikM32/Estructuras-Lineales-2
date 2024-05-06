@@ -120,7 +120,7 @@ class List{
 
         void copy(const List<type>& list)
         {
-            this->empty();
+            this->clear();
 
 
             Node<type>* acum = list.first;
