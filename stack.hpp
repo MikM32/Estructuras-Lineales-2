@@ -75,7 +75,7 @@ class Stack : private List<type>{
         type pop(){return List<type>::removeAtLast();}
 
         // getters
-        void getTop(){return List<type>::getValueAtLast();}
-        void getBottom(){return List<type>::getValueAtFirst();}
+        type getTop(){return List<type>::getValueAtLast();}
+        type getBottom(){return List<type>::getValueAtFirst();}
 };
 #endif // STACK_HEADER
