@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef LIST_HEADER
+#define LIST_HEADER
+
 #include "node.hpp"
 #include <iostream>
 
@@ -11,11 +14,12 @@ class List{
     // =======================================================================
     //                  Atributos y Metodos Privados
     // =======================================================================
-    private:
+    protected:
         Node<type>* first;
         Node<type>* last;
         int size;
 
+    private:
         // Metodos privados para el metodo sort ( usa el algoritmo quick sort )
         Node<type>* partition(Node<type>* first, Node<type>* last)
         {
@@ -86,6 +90,13 @@ class List{
                 }
 
             }
+        }
+
+        void swap(Node<type>* a, Node<type>* b)
+        {
+            type aux = a->getValue();
+            a->setValue(b->getValue());
+            b->setValue(aux);
         }
 
     // =======================================================================
@@ -491,7 +502,7 @@ class List{
         }
 
         type * getPointerToValueAtIndex(int index){
-            Node<type> * pointer = nullptr;
+            Node<type> * pointer = NULL;
 
             // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
             // Lista vacia
@@ -518,7 +529,7 @@ class List{
                 return new type();
             }
             // ----------------------------------------------
-            
+
             // Para disminuir la cantidad de iteraciones se
             // buscar desde el ultimo hasta el indice.
             if(index >= (this->size / 2))
@@ -533,7 +544,7 @@ class List{
             else
             {
                 pointer = this->first;
-                
+
                 for(int i = 0; i < index; i++)
                     pointer = pointer->getNext();
             }
@@ -542,7 +553,7 @@ class List{
         }
 
         type * getPointerToFirstValue(){return this->first->getPointerToValue();}
-        
+
         type * getPointerToLastValue(){return this->last->getPointerToValue();}
 
         // metodos para modificar
@@ -592,4 +603,41 @@ class List{
 
             pointer->setValue(value);
         }
+
+        // Busqueda lineal
+        int search(type value)
+        {
+            Node<type>* acum = this->first;
+            for(int i=0; i<this->size; i++)
+            {
+                if(acum->getValue() == value)
+                {
+                    return i;
+                }
+
+                acum = acum->getNext();
+            }
+
+            return -1; // devuelve -1 si no encontro nada
+        }
+
+        // Metodo reversa
+        void reverse()
+        {
+            Node<type>* left = this->first, *right = this->last;
+            //type aux;
+
+            for(int i=0; i<this->size/2; i++) // Itera hasta la mitad de la lista ya que la recorre desde ambos extremos (inicio y final)
+            {
+                /*
+                aux = left->getValue();
+                left->setValue(right->getValue());
+                right->setValue(aux);*/
+                swap(left, right);
+
+                left = left->getNext();
+                right = right->getPrevious();
+            }
+        }
 };
+#endif // LIST_HEADER

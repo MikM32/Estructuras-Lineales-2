@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef NODE_HEADER
+#define NODE_HEADER
+
 template <typename type>
 class Node{
 private:
@@ -27,3 +30,4 @@ public:
     Node * getPrevious(){return this->previous;}
     type * getPointerToValue(){return &this->value;}
 };
+#endif // NODE_HEADER
