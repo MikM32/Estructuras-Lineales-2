@@ -120,7 +120,7 @@ class List{
 
         void copy(const List<type>& list)
         {
-            this->empty();
+            this->clear();
 
 
             Node<type>* acum = list.first;
@@ -488,5 +488,108 @@ class List{
             {
                 return this->last->getValue();
             }
+        }
+
+        type * getPointerToValueAtIndex(int index){
+            Node<type> * pointer = nullptr;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta solicitando un valor en una lista vacia." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return new type();
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return new type();
+            }
+            // ----------------------------------------------
+            
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+                
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            return pointer->getPointerToValue();
+        }
+
+        type * getPointerToFirstValue(){return this->first->getPointerToValue();}
+        
+        type * getPointerToLastValue(){return this->last->getPointerToValue();}
+
+        // metodos para modificar
+        void ModifyValueAtIndex(int index, type value){
+            Node<type> * pointer = NULL;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl <<  "FUNCION: type ModifyValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta solicitando un valor en una lista vacia." << endl;
+                return;
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl <<  "FUNCION: type ModifyValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                return;
+            }
+            // ----------------------------------------------
+
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            pointer->setValue(value);
         }
 };

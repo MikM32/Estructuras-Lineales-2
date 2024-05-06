@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "compare": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "array": "cpp",
+        "hash_map": "cpp",
+        "chrono": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "iterator": "cpp",
+        "string_view": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "variant": "cpp"
+    }
+}
