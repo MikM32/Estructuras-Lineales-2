@@ -92,6 +92,13 @@ class List{
             }
         }
 
+        void swap(Node<type>* a, Node<type>* b)
+        {
+            type aux = a->getValue();
+            a->setValue(b->getValue());
+            b->setValue(aux);
+        }
+
     // =======================================================================
     //                  Atributos y Metodos Publicos
     // =======================================================================
@@ -495,7 +502,7 @@ class List{
         }
 
         type * getPointerToValueAtIndex(int index){
-            Node<type> * pointer = nullptr;
+            Node<type> * pointer = NULL;
 
             // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
             // Lista vacia
@@ -612,6 +619,25 @@ class List{
             }
 
             return -1; // devuelve -1 si no encontro nada
+        }
+
+        // Metodo reversa
+        void reverse()
+        {
+            Node<type>* left = this->first, *right = this->last;
+            //type aux;
+
+            for(int i=0; i<this->size/2; i++) // Itera hasta la mitad de la lista ya que la recorre desde ambos extremos (inicio y final)
+            {
+                /*
+                aux = left->getValue();
+                left->setValue(right->getValue());
+                right->setValue(aux);*/
+                swap(left, right);
+
+                left = left->getNext();
+                right = right->getPrevious();
+            }
         }
 };
 #endif // LIST_HEADER
