@@ -1,0 +1,492 @@
+#pragma once
+
+#include "node.hpp"
+#include <iostream>
+
+using namespace std;
+
+template <typename type>
+class List{
+
+    // =======================================================================
+    //                  Atributos y Metodos Privados
+    // =======================================================================
+    private:
+        Node<type>* first;
+        Node<type>* last;
+        int size;
+
+        // Metodos privados para el metodo sort ( usa el algoritmo quick sort )
+        Node<type>* partition(Node<type>* first, Node<type>* last)
+        {
+            Node<type>* pivot = last;
+            Node<type>* i = first->getPrevious();
+
+            Node<type>* cur = first;
+            while(cur != NULL)
+            {
+                if(cur == last || !last)
+                {
+                    break;
+                }
+
+                if(cur->getValue() < pivot->getValue())
+                {
+                    if(i)
+                    {
+                        i = i->getNext();
+                    }
+                    else
+                    {
+                        i = first;
+                    }
+
+                    type aux = i->getValue();
+                    i->setValue(cur->getValue());
+                    cur->setValue(aux);
+                }
+
+                cur = cur->getNext();
+            }
+
+
+            type aux;
+
+
+            if(i)
+            {
+                aux = i->getNext()->getValue();
+                i->getNext()->setValue(last->getValue());
+                last->setValue(aux);
+
+                i = i->getNext();
+            }
+            else
+            {
+                i = first;
+                aux = i->getValue();
+                i->setValue(last->getValue());
+                last->setValue(aux);
+            }
+
+            return i;
+
+        }
+
+        void quickSort(Node<type>* first, Node<type>* last)
+        {
+            if(last != NULL && first != last && first != last->getNext())
+            {
+                Node<type>* part = partition(first, last);
+
+                if(part)
+                {
+                    quickSort(first, part->getPrevious());
+                    quickSort(part->getNext(), last);
+                }
+
+            }
+        }
+
+    // =======================================================================
+    //                  Atributos y Metodos Publicos
+    // =======================================================================
+
+    public:
+        // constructor y desctructor
+        List(): first(NULL), last(NULL), size(0) {}
+        ~List()
+        {
+            if(this->size)
+            {
+                Node<type>* acum = this->first, *basura;
+                while(acum != NULL)
+                {
+                    basura = acum;
+                    acum = acum->getNext();
+
+                    delete basura;
+                }
+            }
+        }
+
+        List(const List<type>& l)
+        {
+            this->size = 0;
+            this->first = NULL;
+            this->last = NULL;
+            this->copy(l);
+        }
+
+        void copy(const List<type>& l)
+        {
+            this->empty();
+
+
+            Node<type>* acum = l.first;
+
+            for(int i=0; i<l.size; i++)
+            {
+                this->insertAtLast(acum->getValue());
+                acum = acum->getNext();
+            }
+
+            this->size = l.size;
+
+        }
+
+        bool isEmpty()
+        {
+            return this->size == 0;
+        }
+
+        void empty()
+        {
+            if(this->size)
+            {
+                while(this->size)
+                {
+                    this->removeAtFirst();
+                }
+            }
+        }
+
+        // Metodo ordenar
+        void sort()
+        {
+            this->quickSort(this->first, this->last);
+        }
+
+        // getter
+        int getSize(){return this->size;}
+
+        // metodos para insertar
+        void insertAtIndex(int index, type value){
+            Node<type> * pointer = NULL;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Indice fuera del rango de la lista
+            if(index < 0 || index > this->size){
+                cout << endl << "FUNCION: type removeAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size << "}." << endl;
+                cout << "         Si desea agregar al inicio o al final de la lista" << endl;
+                cout << "         puede usar los metodos 'insertAtFirst(type value)'" << endl;
+                cout << "         y 'insertAtLast(type value)'." << endl << endl;
+
+                return;
+            }
+            // ----------------------------------------------
+
+            // insertar al inicio de las lista
+            if(index == 0){this->insertAtFirst(value);}
+
+            // insertar al final de la lista
+            else if(index == this->size) {this->insertAtLast(value);}
+
+            // insetar el cualquier otro lugar de la lista
+            else
+            {
+                // Para disminuir la cantidad de iteraciones se
+                // buscar desde el ultimo hasta el indice.
+                if(index >= (this->size / 2))
+                {
+                    pointer = this->last;
+
+                    for(int i = index; i < this->size - 1; i++)
+                        pointer = pointer->getPrevious();
+                }
+
+                // o se buscar desde el primero hasta el indice.
+                else
+                {
+                    pointer = this->first;
+
+                    for(int i = 0; i < index; i++)
+                        pointer = pointer->getNext();
+                }
+
+                // insertar y conectar nodos
+                Node<type> * node = new Node<type>(value);
+                node->setNext(pointer);
+                node->setPrevious(pointer->getPrevious());
+
+                pointer->getPrevious()->setNext(node);
+                pointer->setPrevious(node);
+                this->size++;
+            }
+        }
+
+
+        void insertAtFirst(type value){
+            Node<type> * newNode = new Node<type>(value);
+            newNode->setNext(this->first);
+            newNode->setPrevious(NULL);
+
+            if(this->size == 0){
+                this->first = newNode;
+                this->last = newNode;
+            }
+            else{
+                this->first->setPrevious(newNode);
+                this->first = newNode;
+            }
+
+            this->size++;
+        }
+
+        void insertAtLast(type value){
+            Node<type> * newNode = new Node<type>(value);
+            newNode->setNext(NULL);
+            newNode->setPrevious(this->last);
+
+            if(this->size == 0){
+                this->first = newNode;
+                this->last = newNode;
+            }
+            else{
+                this->last->setNext(newNode);
+                this->last = newNode;
+            }
+
+            this->size++;
+        }
+
+        // metodos para eliminar
+        type removeAtIndex(int index){
+            Node<type> * pointer = NULL;
+            type value = type();
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl << "FUNCION: type removeAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta intentando eliminar un valor en una lista vacia." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return type();
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl << "FUNCION: type removeAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return type();
+            }
+            // ----------------------------------------------
+
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            // Conectar nodos y eliminar en indice
+            // SOLO HAY UN NODO
+            if(this->size == 1)
+            {
+                this->first = NULL;
+                this->last = NULL;
+            }
+
+            // Hay mas de un nodo
+            else
+            {
+                // caso para el primer nodo
+                if(index == 0){
+                    this->first = this->first->getNext();
+                    this->first->setPrevious(NULL);
+                }
+
+                // caso para el ultimo nodo
+                else if (index == this->size -1)
+                {
+                    this->last = this->last->getPrevious();
+                    this->last->setNext(NULL);
+                }
+
+                // caso para algun otro nodo
+                else
+                {
+                    pointer->getPrevious()->setNext(pointer->getNext());
+                    pointer->getNext()->setPrevious(pointer->getPrevious());
+                }
+            }
+
+            // eliminar nodo y guardar valor
+            value = pointer->getValue();
+            delete pointer;
+            this->size--;
+
+            // retornar valor
+            return value;
+        }
+
+        type removeAtFirst(){
+            if(this->size > 0)
+            {
+                Node<type> * node = this->first;
+                type value = node->getValue();
+
+                // cuando queda un solo nodo
+                if(this->size == 1){
+                    this->first = NULL;
+                    this->last = NULL;
+                }
+
+                // cuando quedan mas de un nodo
+                else {
+                    this->first = this->first->getNext();
+                    this->first->setPrevious(NULL);
+                }
+
+                this->size--;
+                delete node;
+
+                return value;
+            }
+
+            else
+            {
+                // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+                cout << endl << "FUNCION: void removeAtFirst()" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se intenta eliminar en lista vacia." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+                // ----------------------------------------------
+
+                return type();
+            }
+        }
+
+        type removeAtLast(){
+            if(this->size > 0)
+            {
+                Node<type> * node = this->last;
+                type value = node->getValue();
+
+                // cuando queda un solo nodo
+                if(this->size == 1){
+                    this->first = NULL;
+                    this->last = NULL;
+                }
+
+                // cuando quedan mas de un nodo
+                else {
+                    this->last = this->last->getPrevious();
+                    this->last->setNext(NULL);
+                }
+
+                this->size--;
+                delete node;
+
+                return value;
+            }
+
+            else
+            {
+                // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+                cout << endl << "FUNCION: void removeAtFirst()" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se intenta eliminar en lista vacia." << endl;
+                cout << "CONSEJO: La funcion retornara por defecto el valor {-1}" << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+                // ----------------------------------------------
+
+                return type();
+            }
+        }
+
+        type getValueAtIndex(int index){
+            Node<type> * pointer = NULL;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta solicitando un valor en una lista vacia." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return type();
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return type();
+            }
+            // ----------------------------------------------
+
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            return pointer->getValue();
+        }
+
+        type getValueAtFirst()
+        {
+            if(this->size)
+            {
+                return this->first->getValue();
+            }
+
+        }
+
+        type getValueAtLast()
+        {
+            if(this->size)
+            {
+                return this->last->getValue();
+            }
+        }
+};
