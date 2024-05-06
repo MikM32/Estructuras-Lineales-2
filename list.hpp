@@ -110,28 +110,28 @@ class List{
             }
         }
 
-        List(const List<type>& l)
+        List(const List<type>& list)
         {
             this->size = 0;
             this->first = NULL;
             this->last = NULL;
-            this->copy(l);
+            this->copy(list);
         }
 
-        void copy(const List<type>& l)
+        void copy(const List<type>& list)
         {
             this->empty();
 
 
-            Node<type>* acum = l.first;
+            Node<type>* acum = list.first;
 
-            for(int i=0; i<l.size; i++)
+            for(int i = 0; i < list.size; i++)
             {
                 this->insertAtLast(acum->getValue());
                 acum = acum->getNext();
             }
 
-            this->size = l.size;
+            this->size = list.size;
 
         }
 
@@ -140,7 +140,7 @@ class List{
             return this->size == 0;
         }
 
-        void empty()
+        void clear()
         {
             if(this->size)
             {
