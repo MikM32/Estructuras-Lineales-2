@@ -5,7 +5,6 @@
 
 #include "node.hpp"
 #include "list.hpp"
-#include "stack.hpp"
 #include <iostream>
 
 using namespace std;
@@ -14,14 +13,14 @@ template <typename type>
 class Queue : private List<type>{
     public:
 
-        Stack()
+        Queue()
         {
             this->size = 0;
             this->first = NULL;
             this->last = NULL;
         }
 
-        Stack(const Queue<type>& queue)
+        Queue(const Queue<type>& queue)
         {
             this->size = 0;
             this->first = NULL;
@@ -74,5 +73,4 @@ class Queue : private List<type>{
         void getFirst(){return List<type>::getValueAtFrist();}
         void getLast(){return List<type>::getValueAtLast();}
 };
-
 #endif // QUEUE_HEADER

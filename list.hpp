@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef LIST_HEADER
+#define LIST_HEADER
+
 #include "node.hpp"
 #include <iostream>
 
@@ -89,7 +92,6 @@ class List{
             }
         }
 
-
     // =======================================================================
     //                  Atributos y Metodos Publicos
     // =======================================================================
@@ -112,28 +114,28 @@ class List{
             }
         }
 
-        List(const List<type>& l)
+        List(const List<type>& list)
         {
             this->size = 0;
             this->first = NULL;
             this->last = NULL;
-            this->copy(l);
+            this->copy(list);
         }
 
-        void copy(const List<type>& l)
+        void copy(const List<type>& list)
         {
             this->clear();
 
 
-            Node<type>* acum = l.first;
+            Node<type>* acum = list.first;
 
-            for(int i=0; i<l.size; i++)
+            for(int i = 0; i < list.size; i++)
             {
                 this->insertAtLast(acum->getValue());
                 acum = acum->getNext();
             }
 
-            this->size = l.size;
+            this->size = list.size;
 
         }
 
@@ -184,9 +186,6 @@ class List{
             }
             // ----------------------------------------------
 
-            if(index > 0 && index <= this->size)
-            {
-
             // insertar al inicio de las lista
             if(index == 0){this->insertAtFirst(value);}
 
@@ -223,7 +222,6 @@ class List{
                 pointer->getPrevious()->setNext(node);
                 pointer->setPrevious(node);
                 this->size++;
-            }
             }
         }
 
@@ -269,7 +267,6 @@ class List{
 
             // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
             // Lista vacia
-            /*
             if(this->size == 0){
                 cout << endl << "FUNCION: type removeAtIndex(int index)" << endl;
                 cout << "CLASE: List<type>" << endl ;
@@ -277,10 +274,9 @@ class List{
                 cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
 
                 return type();
-            }*/
+            }
 
             // Indice fuera del rango de la lista
-            /*
             if(index < 0 || index >= this->size){
                 cout << endl << "FUNCION: type removeAtIndex(int index)" << endl;
                 cout << "CLASE: List<type>" << endl ;
@@ -292,14 +288,11 @@ class List{
                 cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
 
                 return type();
-            }*/
+            }
             // ----------------------------------------------
 
             // Para disminuir la cantidad de iteraciones se
             // buscar desde el ultimo hasta el indice.
-            if(this->size > 0 && index < this->size)
-            {
-
             if(index >= (this->size / 2))
             {
                 pointer = this->last;
@@ -356,7 +349,6 @@ class List{
 
             // retornar valor
             return value;
-            }
         }
 
         type removeAtFirst(){
@@ -383,7 +375,6 @@ class List{
                 return value;
             }
 
-            /*
             else
             {
                 // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
@@ -394,7 +385,7 @@ class List{
                 // ----------------------------------------------
 
                 return type();
-            }*/
+            }
         }
 
         type removeAtLast(){
@@ -420,7 +411,7 @@ class List{
 
                 return value;
             }
-            /*
+
             else
             {
                 // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
@@ -432,7 +423,7 @@ class List{
                 // ----------------------------------------------
 
                 return type();
-            }*/
+            }
         }
 
         type getValueAtIndex(int index){
@@ -440,7 +431,6 @@ class List{
 
             // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
             // Lista vacia
-            /*
             if(this->size == 0){
                 cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
                 cout << "CLASE: List<type>" << endl ;
@@ -462,35 +452,29 @@ class List{
                 cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
 
                 return type();
-            }*/
+            }
             // ----------------------------------------------
 
             // Para disminuir la cantidad de iteraciones se
             // buscar desde el ultimo hasta el indice.
-
-            if((index >=0 && index < this->size) && this->size)
+            if(index >= (this->size / 2))
             {
+                pointer = this->last;
 
-                if(index >= (this->size / 2))
-                {
-                    pointer = this->last;
-
-                    for(int i = index; i < this->size - 1; i++)
-                        pointer = pointer->getPrevious();
-                }
-
-                // o se buscar desde el primero hasta el indice.
-                else
-                {
-                    pointer = this->first;
-
-                    for(int i = 0; i < index; i++)
-                        pointer = pointer->getNext();
-                }
-
-                return pointer->getValue();
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
             }
-            return type();
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            return pointer->getValue();
         }
 
         type getValueAtFirst()
@@ -510,6 +494,109 @@ class List{
             }
         }
 
+        type * getPointerToValueAtIndex(int index){
+            Node<type> * pointer = nullptr;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta solicitando un valor en una lista vacia." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return new type();
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl <<  "FUNCION: type getValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                cout << "RETORNO: La funcion retornara un valor por defecto." << endl;
+
+                return new type();
+            }
+            // ----------------------------------------------
+
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            return pointer->getPointerToValue();
+        }
+
+        type * getPointerToFirstValue(){return this->first->getPointerToValue();}
+
+        type * getPointerToLastValue(){return this->last->getPointerToValue();}
+
+        // metodos para modificar
+        void ModifyValueAtIndex(int index, type value){
+            Node<type> * pointer = NULL;
+
+            // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
+            // Lista vacia
+            if(this->size == 0){
+                cout << endl <<  "FUNCION: type ModifyValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: Se esta solicitando un valor en una lista vacia." << endl;
+                return;
+            }
+
+            // Indice fuera del rango de la lista
+            if(index < 0 || index >= this->size){
+                cout << endl <<  "FUNCION: type ModifyValueAtIndex(int index)" << endl;
+                cout << "CLASE: List<type>" << endl ;
+                cout << "ERROR: El indice {";
+                cout << index << "} es menor {0} o mayor o igual al tamaño de la lista {";
+                cout << this->size << "}." << endl;
+                cout << "CONSEJO: El indice debe estar entre 0 y {";
+                cout << this->size - 1 << "}." << endl;
+                return;
+            }
+            // ----------------------------------------------
+
+            // Para disminuir la cantidad de iteraciones se
+            // buscar desde el ultimo hasta el indice.
+            if(index >= (this->size / 2))
+            {
+                pointer = this->last;
+
+                for(int i = index; i < this->size - 1; i++)
+                    pointer = pointer->getPrevious();
+            }
+
+            // o se buscar desde el primero hasta el indice.
+            else
+            {
+                pointer = this->first;
+
+                for(int i = 0; i < index; i++)
+                    pointer = pointer->getNext();
+            }
+
+            pointer->setValue(value);
+        }
+
         // Busqueda lineal
         int search(type value)
         {
@@ -526,7 +613,5 @@ class List{
 
             return -1; // devuelve -1 si no encontro nada
         }
-
-
-
 };
+#endif // LIST_HEADER

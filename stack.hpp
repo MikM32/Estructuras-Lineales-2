@@ -1,13 +1,10 @@
 #pragma once
 
 #ifndef STACK_HEADER
-
-
 #define STACK_HEADER
 
 #include "node.hpp"
 #include "list.hpp"
-#include "queue.hpp"
 #include <iostream>
 
 using namespace std;
@@ -70,7 +67,6 @@ class Stack : private List<type>{
             return this->size == 0;
         }
 
-
         // get size
         int getSize(){return List<type>::getSize();}
 
@@ -82,5 +78,4 @@ class Stack : private List<type>{
         void getTop(){return List<type>::getValueAtLast();}
         void getBottom(){return List<type>::getValueAtFirst();}
 };
-
 #endif // STACK_HEADER

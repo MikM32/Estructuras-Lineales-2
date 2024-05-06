@@ -28,5 +28,6 @@ public:
     type getValue(){return this->value;}
     Node * getNext(){return this->next;}
     Node * getPrevious(){return this->previous;}
+    type * getPointerToValue(){return &this->value;}
 };
 #endif // NODE_HEADER
