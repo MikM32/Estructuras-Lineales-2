@@ -639,5 +639,64 @@ class List{
                 right = right->getPrevious();
             }
         }
+
+        // Metodo concatenar: Concatena el contenido de dos listas
+        void concat(List<type> list2)
+        {
+            for(int i=0; i<list2.getSize(); i++)
+            {
+                this->insertAtLast(list2.getValueAtIndex(i));
+            }
+        }
+
+        // Metodo substraer: elimina los elementos de la lista que estan en lista2
+        void substract(List<type> list2)
+        {
+            for(int i=0; i<list2.getSize(); i++)
+            {
+                int index = this->search(list2.getValueAtIndex(i));
+                if(index >= 0)
+                {
+                    this->removeAtIndex(index);
+                }
+            }
+        }
+
+        // Metodo interseccion: devuelve una lista con los elementos que estan en ambas listas
+        List<type> intersect(List<type> list2)
+        {
+            List<type> res;
+            for(int i=0; i<list2.getSize(); i++)
+            {
+                int index = this->search(list2.getValueAtIndex(i));
+                if(index >= 0)
+                {
+                    res.insertAtLast(this->getValueAtIndex(i));
+                }
+            }
+
+            return res;
+        }
+
+    // =======================================================================
+    //                  Sobrecarga de Operadores
+    // =======================================================================
+
+    List<type> operator+(List<type> const& list2)
+    {
+        List<type> res(*this);
+        res.concat(list2);
+
+        return res;
+    }
+
+    List<type> operator-(List<type> const& list2)
+    {
+        List<type> res(*this);
+        res.substract(list2);
+
+        return res;
+    }
+
 };
 #endif // LIST_HEADER
