@@ -1,7 +1,11 @@
 #pragma once
 
+#ifndef QUEUE_HEADER
+#define QUEUE_HEADER
+
 #include "node.hpp"
 #include "list.hpp"
+#include "stack.hpp"
 #include <iostream>
 
 using namespace std;
@@ -10,9 +14,53 @@ template <typename type>
 class Queue : private List<type>{
     public:
 
-        void copy()
+        Stack()
         {
+            this->size = 0;
+            this->first = NULL;
+            this->last = NULL;
+        }
 
+        Stack(const Queue<type>& queue)
+        {
+            this->size = 0;
+            this->first = NULL;
+            this->last = NULL;
+            this->copy(queue);
+        }
+
+        void copy(const Queue<type>& queue)
+        {
+            this->clear();
+
+            Node<type>* acum = queue.first;
+            for(int i=0; i<queue.size; i++)
+            {
+                this->enqueue(acum->getValue());
+                acum = acum->getNext();
+            }
+        }
+
+        void copyList(List<type> list)
+        {
+            this->clear();
+
+            int lSize = list.getSize();
+            for(int i=0; i<lSize; i++)
+            {
+                this->enqueue(list.getValueAtIndex(i));
+            }
+        }
+
+        void clear()
+        {
+            if(this->size)
+            {
+                while(this->size)
+                {
+                    this->dequeue();
+                }
+            }
         }
 
         // get size
@@ -26,3 +74,5 @@ class Queue : private List<type>{
         void getFirst(){return List<type>::getValueAtFrist();}
         void getLast(){return List<type>::getValueAtLast();}
 };
+
+#endif // QUEUE_HEADER
