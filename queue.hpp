@@ -70,7 +70,7 @@ class Queue : private List<type>{
         type dequeue(){return List<type>::removeAtFirst();}
 
         // getters
-        void getFirst(){return List<type>::getValueAtFrist();}
-        void getLast(){return List<type>::getValueAtLast();}
+        type getFirst(){return List<type>::getValueAtFrist();}
+        type getLast(){return List<type>::getValueAtLast();}
 };
 #endif // QUEUE_HEADER
