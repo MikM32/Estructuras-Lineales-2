@@ -486,19 +486,26 @@ class List{
 
         type getValueAtFirst()
         {
+            type result = type();
+
             if(this->size)
             {
-                return this->first->getValue();
+                result this->first->getValue();
             }
 
+            return result;
         }
 
         type getValueAtLast()
         {
+            type result = type();
+
             if(this->size)
             {
-                return this->last->getValue();
+                result = this->last->getValue();
             }
+
+            return result;
         }
 
         type * getPointerToValueAtIndex(int index){
@@ -625,14 +632,9 @@ class List{
         void reverse()
         {
             Node<type>* left = this->first, *right = this->last;
-            //type aux;
 
             for(int i=0; i<this->size/2; i++) // Itera hasta la mitad de la lista ya que la recorre desde ambos extremos (inicio y final)
             {
-                /*
-                aux = left->getValue();
-                left->setValue(right->getValue());
-                right->setValue(aux);*/
                 swap(left, right);
 
                 left = left->getNext();
