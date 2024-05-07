@@ -557,7 +557,7 @@ class List{
         type * getPointerToLastValue(){return this->last->getPointerToValue();}
 
         // metodos para modificar
-        void ModifyValueAtIndex(int index, type value){
+        void modifyValueAtIndex(int index, type value){
             Node<type> * pointer = NULL;
 
             // ALERTAS PARA DETECCION DE ERRORES EN EL TALLER
@@ -605,20 +605,37 @@ class List{
         }
 
         // Busqueda lineal
-        int search(type value)
+        int getIndexOfValue(type value)
         {
             Node<type>* acum = this->first;
+            int result = -1;
+
             for(int i=0; i<this->size; i++)
             {
                 if(acum->getValue() == value)
-                {
-                    return i;
-                }
+                    result = i;
 
                 acum = acum->getNext();
             }
 
-            return -1; // devuelve -1 si no encontro nada
+            // retorna -1 si no se encontro el valor
+            return result; 
+        }
+
+        bool contains(type value)
+        {
+            Node<type>* acum = this->first;
+            bool result = false;
+
+            for(int i=0; i<this->size; i++)
+            {
+                if(acum->getValue() == value)
+                    result = true;
+
+                acum = acum->getNext();
+            }
+
+            return result; 
         }
 
         // Metodo reversa
