@@ -490,7 +490,7 @@ class List{
 
             if(this->size)
             {
-                result this->first->getValue();
+                result = this->first->getValue();
             }
 
             return result;
@@ -612,7 +612,7 @@ class List{
         }
 
         // Busqueda lineal
-        int search(type value)
+        int getIndexOfValue(type value)
         {
             Node<type>* acum = this->first;
             for(int i=0; i<this->size; i++)
@@ -626,6 +626,22 @@ class List{
             }
 
             return -1; // devuelve -1 si no encontro nada
+        }
+
+        bool contains(type value)
+        {
+            Node<type>* acum = this->first;
+            bool result = false;
+            
+            for(int i=0; i<this->size; i++)
+            {
+                if(acum->getValue() == value)
+                    result = true;
+
+                acum = acum->getNext();
+            }
+
+            return result;
         }
 
         // Metodo reversa
